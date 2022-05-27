@@ -1,5 +1,8 @@
 <?php
 
+require './utils/array_validation.php';
+require './utils/constants.php';
+
 // Connecting to the MySQL database.
 $server = 'localhost';
 $username = 'rafael';
@@ -34,7 +37,7 @@ if ($db_posts->num_rows > 0) {
                         'name' => $post_owner['username'],
                         'link' => 'https://google.com'
                     ],
-                    'link' => 'https://google.com'
+                    'link' => "/post.php?id=" . $post['id']
                 ];
             }
         }
@@ -55,7 +58,7 @@ $loggedIn = true;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petlandia | Home</title>
+    <title>Petlandia - Home</title>
 
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -73,8 +76,8 @@ $loggedIn = true;
         <div class="posts">
             <?php foreach ($posts as $post) {
 
-                // Making sure all the post's fields are not null.
-                if (isset($post['title']) && isset($post['body']) && isset($post['owner']) && isset($post['link'])) {
+                // Making sure all the post's fields are set.
+                if (validate_array($post)) {
 
                     echo "<div class='list-post'>";
 
@@ -89,7 +92,7 @@ $loggedIn = true;
                     echo "<h3><a href='" . $post_link . "'>" . $post_title . "</h3>";
 
                     // We print the owner
-                    if (isset($post_owner['name']) && isset($post_owner['link'])) {
+                    if (validate_array($post_owner)) {
                         $owner_name = $post_owner['name'];
                         $owner_link = $post_owner['link'];
                         echo "<b>By: <a href='>" . $owner_link . "'>" . $owner_name . "</a></b>";
