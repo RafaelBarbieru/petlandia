@@ -47,3 +47,29 @@ nav ul {
     background-color: blue;
     color: white;
 }
+
+.user-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 200px);
+    justify-content: center;
+    align-items: center;
+}
+
+.user {
+    max-width: 60%;
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.user img {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 50%;
+}

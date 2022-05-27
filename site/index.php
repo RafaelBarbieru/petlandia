@@ -36,7 +36,7 @@ if ($db_posts->num_rows > 0) {
                     'body' => $post['body'],
                     'owner' => [
                         'name' => $post_owner['username'],
-                        'link' => 'https://google.com'
+                        'link' => '/user.php?id=' . $post_owner['id']
                     ],
                     'link' => "/post.php?id=" . $post['id']
                 ];
@@ -93,7 +93,7 @@ $loggedIn = true;
                     if (validate_array($post_owner)) {
                         $owner_name = $post_owner['name'];
                         $owner_link = $post_owner['link'];
-                        echo "<b>By: <a href='>" . $owner_link . "'>" . $owner_name . "</a></b>";
+                        echo "<b>By: <a href='" . $owner_link . "'>" . $owner_name . "</a></b>";
                     }
 
                     // If the post's body exceeds 300 characters, we only show the first 297 and an ellipsis at the end.
