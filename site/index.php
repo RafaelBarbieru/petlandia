@@ -31,6 +31,7 @@ if ($db_posts->num_rows > 0) {
 
                 // We append the information to the $posts array we'll later use to show in the HTML code.
                 $posts[] = [
+                    'id' => $post['id'],
                     'title' => $post['title'],
                     'body' => $post['body'],
                     'owner' => [
@@ -43,9 +44,6 @@ if ($db_posts->num_rows > 0) {
         }
     }
 }
-
-// We close the connection to the database.
-$connection->close();
 
 $loggedIn = true;
 
@@ -108,9 +106,20 @@ $loggedIn = true;
                     // We print the link
                     echo "<a class='go-to-post' href='" . $post_link . "'>Go to post</a>";
 
+                    // We print the number of comments after getting them from the database
+                    $number_of_comments = $connection->query("SELECT count(*) FROM petlandia.comments WHERE post_id = '" . $post['id'] . "'");
+                    if ($number_of_comments->num_rows > 0) {
+                        echo "<span style='margin-left: 1rem;'>Comments: " . $number_of_comments->fetch_array()[0] . "</span>";
+                    }
+
                     echo "</div>";
                 }
-            } ?>
+            }
+
+            // We close the database connection because we don't need it anymore.
+            $connection->close();
+
+            ?>
         </div>
     </div>
 

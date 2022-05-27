@@ -118,7 +118,7 @@ $loggedIn = true;
         ?>
 
         <div class="comments">
-            <h3 class="comments-title">Comments</h3>
+            <h3 class="comments-title">Comments (<?php echo count($post['comments']); ?>)</h3>
 
             <?php
 
