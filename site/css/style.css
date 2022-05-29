@@ -73,3 +73,27 @@ nav ul {
     object-fit: cover;
     border-radius: 50%;
 }
+
+.login-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 200px);
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.input-group label {
+    text-align: end;
+}

@@ -1,12 +1,10 @@
 <?php
 
+require './config.php';
 require './utils/array_validation.php';
 
 // Connecting to the MySQL database.
-$server = 'localhost';
-$username = 'rafael';
-$password = 'rafael';
-$connection = new mysqli($server, $username, $password);
+$connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 if ($connection->connect_error) {
     die("Couldn't connect to the database");
@@ -42,7 +40,7 @@ if ($db_post->num_rows > 0) {
                                 'link' => '/user.php?id=' . $comment_owner['id']
                             ]
                         ];
-                    }                    
+                    }
                 }
             }
             $post = [
@@ -52,7 +50,8 @@ if ($db_post->num_rows > 0) {
                     'name' => $owner['username'],
                     'link' => '/user.php?id=' . $owner['id']
                 ],
-                'comments' => $comments
+                'comments' => $comments,
+                'draft' => $_post['draft']
             ];
         }
     }
@@ -61,7 +60,11 @@ if ($db_post->num_rows > 0) {
 // We close the connection to the database.
 $connection->close();
 
-$loggedIn = true;
+if (isset($_SESSION['current_user_id'])) {
+    $loggedIn = true;
+} else {
+    $loggedIn = false;
+}
 
 ?>
 
@@ -89,58 +92,65 @@ $loggedIn = true;
         <div id="navbar"></div>
         <?php
 
-        // Making sure all the post's fields are set.
+        // Making sure all the required post's fields are set.
         if (isset($post['title'])) {
 
-            // Saving the post's fields in variables for easier access.
-            $post_title = $post['title'];
-            $post_body = $post['body'];
-            $post_owner = $post['owner'];
+            // We check if the post is a draft
+            if ($post['draft']) {
+                echo "This post is a draft and you're not authorized to view it.";
+            } else {
+                // Saving the post's fields in variables for easier access.
+                $post_title = $post['title'];
+                $post_body = $post['body'];
+                $post_owner = $post['owner'];
 
-            echo "<div class='post'>";
+                echo "<div class='post'>";
 
-            // We print the title
-            echo "<h3>" . $post_title . "</h3>";
+                // We print the title
+                echo "<h3>" . $post_title . "</h3>";
 
-            // We print the owner
-            if (validate_array($post_owner)) {
-                $owner_name = $post_owner['name'];
-                $owner_link = $post_owner['link'];
-                echo "<b>By: <a href='" . $owner_link . "'>" . $owner_name . "</a></b>";
+                // We print the owner
+                if (validate_array($post_owner)) {
+                    $owner_name = $post_owner['name'];
+                    $owner_link = $post_owner['link'];
+                    echo "<b>By: <a href='" . $owner_link . "'>" . $owner_name . "</a></b>";
+                }
+
+                // We print the body
+                echo "<p>" . $post_body . "</p>";
+
+                echo "</div>";
             }
-
-            // We print the body
-            echo "<p>" . $post_body . "</p>";
-
-            echo "</div>";
         }
 
         ?>
 
-        <div class="comments">
-            <h3 class="comments-title">Comments (<?php echo count($post['comments']); ?>)</h3>
+        <!-- Before displaying the comments, we check if the post is a draft once again -->
+        <?php if (!$post['draft']) { ?>
+            <div class="comments">
+                <h3 class="comments-title">Comments (<?php echo count($post['comments']); ?>)</h3>
 
-            <?php
+                <?php
 
-            if (count($post['comments']) > 0) {
-                
-                foreach ($post['comments'] as $comment) {
-                    echo "<div class='comment'>";
+                if (count($post['comments']) > 0) {
 
-                    echo "<b><a href='" . $comment['owner']['link'] . "'>" . $comment['owner']['name'] . "</a></b>";
-                    echo "<p>" . $comment['body'] . "</p>";
-                    echo "<hr /";
+                    foreach ($post['comments'] as $comment) {
+                        echo "<div class='comment'>";
 
-                    echo "</div>";
+                        echo "<b><a href='" . $comment['owner']['link'] . "'>" . $comment['owner']['name'] . "</a></b>";
+                        echo "<p>" . $comment['body'] . "</p>";
+                        echo "<hr /";
+
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p>There are no comments on this post</p>";
                 }
 
-            } else {
-                echo "<p>There are no comments on this post</p>";
-            }
+                ?>
 
-            ?>
-
-        </div>
+            </div>
+        <?php } ?>
     </div>
 
     <!-- Load navbar template -->

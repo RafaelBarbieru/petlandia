@@ -1,13 +1,10 @@
 <?php
 
+require './config.php';
 require './utils/array_validation.php';
-require './utils/constants.php';
 
 // Connecting to the MySQL database.
-$server = 'localhost';
-$username = 'rafael';
-$password = 'rafael';
-$connection = new mysqli($server, $username, $password);
+$connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 if ($connection->connect_error) {
     die("Couldn't connect to the database");
@@ -45,7 +42,12 @@ if ($db_posts->num_rows > 0) {
     }
 }
 
-$loggedIn = true;
+if (isset($_SESSION['current_user_id'])) {
+    $loggedIn = true;
+} else {
+    $loggedIn = false;
+}
+
 
 ?>
 

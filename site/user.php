@@ -1,12 +1,10 @@
 <?php
 
+require './config.php';
 require './utils/array_validation.php';
 
 // Connecting to the MySQL database.
-$server = 'localhost';
-$username = 'rafael';
-$password = 'rafael';
-$connection = new mysqli($server, $username, $password);
+$connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 if ($connection->connect_error) {
     die("Couldn't connect to the database");
@@ -29,7 +27,11 @@ if ($db_user->num_rows > 0) {
 // We close the connection to the database.
 $connection->close();
 
-$loggedIn = true;
+if (isset($_SESSION['current_user_id'])) {
+    $loggedIn = true;
+} else {
+    $loggedIn = false;
+}
 
 ?>
 
@@ -40,7 +42,7 @@ $loggedIn = true;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petlandia - User</title>
+    <title>Petlandia - <?php echo isset($user['name']) ? $user['name'] : "Anonymous user" ?></title>
 
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -70,7 +72,7 @@ $loggedIn = true;
                 if (isset($user['picture'])) {
                     echo "<img src='" . $user['picture'] . "' />";
                 } else {
-                    echo "<img src='./static/anonymous_user.png' />";
+                    echo "<img src='./images/anonymous_user.png' />";
                 }
                 
 
