@@ -31,12 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = $_POST['password'];
 
         // We make a prepared statement to query the database since we're dealing with user input.
-        $query = "SELECT id, password FROM users WHERE username = ? OR email = ?";
+        $query = "SELECT id, username, password FROM users WHERE username = ? OR email = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $username, $username);
         $stmt->execute();
         $user = $stmt->get_result();
-        
+
         // If we found a user, we validate the password
         if ($user->num_rows > 0) {
             $user_arr = $user->fetch_assoc();
@@ -44,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // We set the id of the user to the current_user_id session variable
                 $_SESSION["CURRENT_USER_ID"] = $user_arr['id'];
+                $_SESSION["CURRENT_USER_NAME"] = $user_arr['username'];
                 $_SESSION["LAST_ACTIVITY"] = time();
                 redirect("/");
-
             } else {
                 $fields_error = "Incorrect credentials";
             }
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Body -->
     <div class="container">
-        <div id="navbar"></div>
+        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
         <form class="login-container" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
             <div class="login-box">
                 <h3>Log in</h3>
@@ -96,21 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
-
-    <!-- Load navbar template -->
-    <?php if ($loggedIn) { ?>
-        <script>
-            $.get('./templates/navbar-logged-in.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } else { ?>
-        <script>
-            $.get('./templates/navbar-logged-out.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } ?>
 
 </body>
 

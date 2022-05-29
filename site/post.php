@@ -62,7 +62,7 @@ if ($db_post->num_rows > 0) {
 // We close the connection to the database.
 $connection->close();
 
-if (isset($_SESSION['current_user_id'])) {
+if (isset($_SESSION['CURRENT_USER_ID'])) {
     $loggedIn = true;
 } else {
     $loggedIn = false;
@@ -91,7 +91,7 @@ if (isset($_SESSION['current_user_id'])) {
 
     <!-- Body -->
     <div class="container">
-        <div id="navbar"></div>
+        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
         <?php
 
         // Making sure all the require_onced post's fields are set.
@@ -132,6 +132,14 @@ if (isset($_SESSION['current_user_id'])) {
             <div class="comments">
                 <h3 class="comments-title">Comments (<?php echo count($post['comments']); ?>)</h3>
 
+                <!-- In case the user is logged in, show the comment posting form. -->
+                <?php if ($loggedIn) { ?>
+                <form class="user-comment-container">                    
+                    <textarea name="comment" class="comment-input" placeholder="Write a comment as <?php echo $_SESSION['CURRENT_USER_NAME'] ?>"></textarea>
+                    <input type="submit" />
+                </form>
+                <?php } ?>
+
                 <?php
 
                 if (count($post['comments']) > 0) {
@@ -154,21 +162,6 @@ if (isset($_SESSION['current_user_id'])) {
             </div>
         <?php } ?>
     </div>
-
-    <!-- Load navbar template -->
-    <?php if ($loggedIn) { ?>
-        <script>
-            $.get('./templates/navbar-logged-in.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } else { ?>
-        <script>
-            $.get('./templates/navbar-logged-out.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } ?>
 
 </body>
 

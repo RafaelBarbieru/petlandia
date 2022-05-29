@@ -50,7 +50,6 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
     $loggedIn = false;
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +73,7 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
 
     <!-- Body -->
     <div class="container">
-        <div id="navbar"></div>
+        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
         <div class="posts">
             <?php foreach ($posts as $post) {
 
@@ -126,22 +125,6 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
             ?>
         </div>
     </div>
-
-    <!-- Load navbar template -->
-    <?php if ($loggedIn) { ?>
-        <script>
-            $.get('./templates/navbar-logged-in.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } else { ?>
-        <script>
-            $.get('./templates/navbar-logged-out.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } ?>
-
 </body>
 
 </html>

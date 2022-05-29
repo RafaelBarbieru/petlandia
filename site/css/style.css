@@ -102,3 +102,19 @@ nav ul {
     color: red;
     font-size: 0.8rem;
 }
+
+.user-comment-container {
+    margin-bottom: 1rem;
+}
+
+.user-comment-container input {
+    width: 100px;
+    float: right;
+}
+
+.comment-input {
+    resize: none;
+    width: 100%;
+    height: 5rem;
+    padding: 0.5rem;
+}

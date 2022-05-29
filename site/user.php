@@ -29,7 +29,7 @@ if ($db_user->num_rows > 0) {
 // We close the connection to the database.
 $connection->close();
 
-if (isset($_SESSION['current_user_id'])) {
+if (isset($_SESSION['CURRENT_USER_ID'])) {
     $loggedIn = true;
 } else {
     $loggedIn = false;
@@ -58,7 +58,7 @@ if (isset($_SESSION['current_user_id'])) {
 
     <!-- Body -->
     <div class="container">
-        <div id="navbar"></div>
+        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
         <div class="user-container">
             <?php
 
@@ -76,7 +76,7 @@ if (isset($_SESSION['current_user_id'])) {
                 } else {
                     echo "<img src='./images/anonymous_user.png' />";
                 }
-                
+
 
                 echo "</div>";
             }
@@ -84,21 +84,6 @@ if (isset($_SESSION['current_user_id'])) {
             ?>
         </div>
     </div>
-
-    <!-- Load navbar template -->
-    <?php if ($loggedIn) { ?>
-        <script>
-            $.get('./templates/navbar-logged-in.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } else { ?>
-        <script>
-            $.get('./templates/navbar-logged-out.html', (data) => {
-                $('#navbar').replaceWith(data)
-            })
-        </script>
-    <?php } ?>
 
 </body>
 
