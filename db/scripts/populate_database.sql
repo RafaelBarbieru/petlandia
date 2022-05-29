@@ -1,31 +1,31 @@
 /* ===== Users ===== */
 
-/* password: rafaelbarbieru */
+/* password: password123 */
 INSERT INTO users VALUES(
     'efc3fb4f-3b25-45b8-8a98-6c0f1db9ef3f', 
     'rafaelgirafa', 
     'baracri00@gmail.com', 
-    '$2a$12$TgPDzdg1KMd0etkJX.ZYHe2lBAksnlCI34a6y8rzA11j5xS/xsQ3O', 
+    '$2y$10$Z7Tmvja.hIJMyQRbdpPCyeclmzO3.gX8TgHGwXv8Cq.1dU7VD4UDq', 
     NULL, 
     0
 );
 
-/* password: fabiovelazquez */
+/* password: password123 */
 INSERT INTO users VALUES(
     'd862a769-47d7-4c9b-8690-b0e86584314a', 
     'fvelazq98', 
     'redscorpinox@gmail.com', 
-    '$2a$12$C4rZ6bX4woSj2SNSDjaMgeU34ThCk8uMkjFR/SiDwdKsrD/wqOI52', 
+    '$2y$10$Z7Tmvja.hIJMyQRbdpPCyeclmzO3.gX8TgHGwXv8Cq.1dU7VD4UDq', 
     NULL, 
     0
 );
 
-/* password: tamaraarama */
+/* password: password123 */
 INSERT INTO users VALUES(
     '7c7f0d05-022a-4c72-b728-767db671c329', 
     'crazy4u', 
     'other@other.com', 
-    '$2a$12$j4AVa71PaiFIlapfng8QhOW0dzH1iXSirtOQ9ABbYjZojNSya8RNC', 
+    '$2y$10$Z7Tmvja.hIJMyQRbdpPCyeclmzO3.gX8TgHGwXv8Cq.1dU7VD4UDq', 
     NULL, 
     0
 );
@@ -35,7 +35,7 @@ INSERT INTO users VALUES(
     'fff2c092-9bce-432f-b4db-39afe52dceb3',
     'Administrator',
     'admin@petlandia.com',
-    '$2a$12$2fnkasFTUunDwTUd2COzHOsVGWUQJ0cxC4sNkS970zXRcuOSsRuFS',
+    '$2y$10$kNt9Y.YTKfD6Sd/LSav8Qu/5axNHs5cbt81Bh.k1wOX0.D2OeLgy.',
     NULL,
     1
 );

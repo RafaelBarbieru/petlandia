@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once './config.php';
 require_once './utils/array_validation.php';
 
@@ -15,10 +17,10 @@ $post = [];
 $db_post = $connection->query("SELECT * FROM petlandia.posts posts WHERE posts.id = '" . $_GET['id'] . "'");
 
 if ($db_post->num_rows > 0) {
-    while ($_post = $db_post->fetch_assoc()) {
+    while ($local_post = $db_post->fetch_assoc()) {
 
         // Getting the post owner.
-        $db_owner = $connection->query("SELECT * FROM petlandia.users users WHERE users.id = '" . $_post['user_id'] . "'");
+        $db_owner = $connection->query("SELECT * FROM petlandia.users users WHERE users.id = '" . $local_post['user_id'] . "'");
         if ($db_owner->num_rows > 0) {
 
             $owner = $db_owner->fetch_assoc();
@@ -44,14 +46,14 @@ if ($db_post->num_rows > 0) {
                 }
             }
             $post = [
-                'title' => $_post['title'],
-                'body' => $_post['body'],
+                'title' => $local_post['title'],
+                'body' => $local_post['body'],
                 'owner' => [
                     'name' => $owner['username'],
                     'link' => '/user.php?id=' . $owner['id']
                 ],
                 'comments' => $comments,
-                'draft' => $_post['draft']
+                'draft' => $local_post['draft']
             ];
         }
     }

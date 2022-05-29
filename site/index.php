@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once './config.php';
 require_once './utils/array_validation.php';
 
@@ -42,7 +44,7 @@ if ($db_posts->num_rows > 0) {
     }
 }
 
-if (isset($_SESSION['current_user_id'])) {
+if (isset($_SESSION['CURRENT_USER_ID'])) {
     $loggedIn = true;
 } else {
     $loggedIn = false;
