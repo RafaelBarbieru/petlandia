@@ -12,8 +12,19 @@ if ($connection->connect_error) {
     die("Couldn't connect to the database");
 }
 
-// Getting the post by its ID.
-$post = [];
+// Getting the user by their ID.
+$user = [];
+$db_user = $connection->query("SELECT * FROM petlandia.users users WHERE users.id = '" . $_GET['id'] . "'");
+
+if ($db_user->num_rows > 0) {
+    while ($_user = $db_user->fetch_assoc()) {
+        $user = [
+            'name' => $_user['username'],
+            'email' => $_user['email'],
+            'picture' => $_user['profile_picture']
+        ];
+    }
+}
 
 // We close the connection to the database.
 $connection->close();
@@ -45,14 +56,28 @@ $loggedIn = true;
     <div class="container">
         <div id="navbar"></div>
         <div class="user-container">
-            <div class="user">
-                <span>
-                    <h4>sprotgbMXwZaHr36Re2a!g6JJLLfdS </h4>
-                    <small>&lt;baracri00@gmail.com&gt;</small>
-                </span>
-                <img src="https://media-exp1.licdn.com/dms/image/C5603AQHohPMryw7uSQ/profile-displayphoto-shrink_400_400/0/1653223370843?e=1658966400&v=beta&t=h1w7FFhdjZ_6s5L-Euo-90PxwZsQxR9LTgj6q7PkXco" />
-            </div>
+            <?php
 
+            if (isset($user['name']) && isset($user['email'])) {
+                echo "<div class='user'>";
+
+                echo "<span>";
+                echo "<h4>" . $user['name'] . "</h4>";
+                echo "<small>&lt;" . $user['email'] . "&gt;</small>";
+                echo "</span>";
+
+                // We set the default profile picture if the user doesn't have one assigned
+                if (isset($user['picture'])) {
+                    echo "<img src='" . $user['picture'] . "' />";
+                } else {
+                    echo "<img src='./static/anonymous_user.png' />";
+                }
+                
+
+                echo "</div>";
+            }
+
+            ?>
         </div>
     </div>
 
