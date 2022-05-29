@@ -1,7 +1,7 @@
 <?php
 
-require './config.php';
-require './utils/array_validation.php';
+require_once './config.php';
+require_once './utils/array_validation.php';
 
 // Connecting to the MySQL database.
 $connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
@@ -92,7 +92,7 @@ if (isset($_SESSION['current_user_id'])) {
         <div id="navbar"></div>
         <?php
 
-        // Making sure all the required post's fields are set.
+        // Making sure all the require_onced post's fields are set.
         if (isset($post['title'])) {
 
             // We check if the post is a draft

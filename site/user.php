@@ -1,7 +1,7 @@
 <?php
 
-require './config.php';
-require './utils/array_validation.php';
+require_once './config.php';
+require_once './utils/array_validation.php';
 
 // Connecting to the MySQL database.
 $connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);

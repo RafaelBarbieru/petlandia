@@ -1,8 +1,8 @@
 <?php
 
-require './config.php';
-require './utils/array_validation.php';
-require './utils/redirection.php';
+require_once './config.php';
+require_once './utils/array_validation.php';
+require_once './utils/redirection.php';
 
 // If the user is already logged in, we redirect them to the homepage.
 if (isset($_SESSION['current_user_id'])) {
