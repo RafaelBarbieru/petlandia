@@ -145,13 +145,25 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                 <h3 class="comments-title">Comments (<?php echo isset($post['comments']) ? count($post['comments']) : 0; ?>)</h3>
 
                 <!-- In case the user is logged in, show the comment posting form. -->
-                <?php if ($loggedIn) { ?>
+                <?php if ($loggedIn) { 
+                    
+                    // We generate a one time action token to prevent CSRF attacks.
+                    if (!isset($_SESSION['POST_COMMENT_TOKEN'])) {
+                        $post_comment_token = bin2hex(openssl_random_pseudo_bytes(64));
+                        $_SESSION['POST_COMMENT_TOKEN'] = $post_comment_token;
+                    } else {
+                        $post_comment_token = $_SESSION['POST_COMMENT_TOKEN'];
+                    }
+
+                    ?>
+                    
                     <form action="./actions/post_comment.php" method="POST" class="user-comment-container">
                         <textarea name="comment" class="comment-input" placeholder="Write a comment as <?php echo $_SESSION['CURRENT_USER_NAME'] ?>"></textarea>
                         <input type="submit" />
                         <input hidden name="user_id" value=<?php echo $_SESSION['CURRENT_USER_ID'] ?> />
                         <input hidden name="post_id" value=<?php echo $post['id'] ?> />
                         <input hidden name="url_back_reference" value="/post.php?id=<?php echo $post['id'] ?>" />
+                        <input hidden name="post_comment_token" value="<?php echo $post_comment_token ?>" />
                     </form>
                 <?php } else { ?>
                     <p>You need to <a style="text-decoration: underline; color: blue;" href="/login.php">Log in</a> in order to comment.</p>
