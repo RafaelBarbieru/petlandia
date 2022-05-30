@@ -10,9 +10,17 @@ require_once './utils/date_formatting.php';
 // Connecting to the MySQL database.
 $connection = connect_to_db();
 
-// Getting the user by their ID.
+// Getting the user by their ID using a prepared statement.
 $user = [];
-$db_user = $connection->query("SELECT * FROM petlandia.users users WHERE users.id = '" . $_GET['id'] . "'");
+
+// We escape html characters to avoid XSS attacks.
+$user_id = htmlspecialchars($_GET['id']);
+
+$query = "SELECT * FROM users WHERE id = ?";
+$stmt = $connection->prepare($query);
+$stmt->bind_param("s", $user_id);
+$stmt->execute();
+$db_user = $stmt->get_result();
 
 if ($db_user->num_rows > 0) {
     while ($_user = $db_user->fetch_assoc()) {

@@ -10,7 +10,7 @@ require_once './utils/date_formatting.php';
 // Connecting to the MySQL database.
 $connection = connect_to_db();
 
-// Filling the posts array with data from the database.
+// Filling the posts array with data from the database with a raw query because there are no parameters.
 $posts = [];
 $db_posts = $connection->query("SELECT * FROM petlandia.posts");
 
@@ -20,8 +20,12 @@ if ($db_posts->num_rows > 0) {
         // We check the visibility of the post (whether it's a draft or not) and decide to show it or not.
         if (!$post['draft']) {
 
-            // We get the post's owner information from the database.
-            $db_post_owner = $connection->query("SELECT * FROM petlandia.users users WHERE users.id = '" . $post['user_id'] . "'");
+            // We get the post's owner information from the database using a prepared statement.
+            $query = "SELECT * FROM petlandia.users users WHERE users.id = ?";
+            $stmt = $connection->prepare($query);
+            $stmt->bind_param("s", $post['user_id']);
+            $stmt->execute();
+            $db_post_owner = $stmt->get_result();
             if ($db_post_owner->num_rows > 0) {
 
                 $post_owner = $db_post_owner->fetch_assoc();
@@ -110,8 +114,12 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                     // We print the link
                     echo "<a class='go-to-post' href='" . $post_link . "'>Go to post</a>";
 
-                    // We print the number of comments after getting them from the database
-                    $number_of_comments = $connection->query("SELECT count(*) FROM petlandia.comments WHERE post_id = '" . $post['id'] . "'");
+                    // We print the number of comments after getting them from the database using a prepared statement
+                    $query = "SELECT count(*) FROM petlandia.comments WHERE post_id = ?";
+                    $stmt = $connection->prepare($query);
+                    $stmt->bind_param("s", $post['id']);
+                    $stmt->execute();
+                    $number_of_comments = $stmt->get_result();                    
                     if ($number_of_comments->num_rows > 0) {
                         echo "<span style='margin-left: 1rem;'>Comments: " . $number_of_comments->fetch_array()[0] . "</span>";
                     }
