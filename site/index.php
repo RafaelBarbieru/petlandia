@@ -12,7 +12,7 @@ $connection = connect_to_db();
 
 // Filling the posts array with data from the database with a raw query because there are no parameters.
 $posts = [];
-$db_posts = $connection->query("SELECT * FROM petlandia.posts");
+$db_posts = $connection->query("SELECT * FROM petlandia.posts ORDER BY created_at DESC");
 
 if ($db_posts->num_rows > 0) {
     while ($post = $db_posts->fetch_assoc()) {

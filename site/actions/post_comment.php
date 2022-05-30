@@ -7,6 +7,7 @@ require_once '../utils/dbutils.php';
 require_once '../utils/uuid.php';
 require_once '../utils/redirection.php';
 require_once '../utils/date_formatting.php';
+require_once '../utils/field_validation.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -14,8 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $connection = connect_to_db();
 
     // We validate the anti-CSRF token
-    $request_token = $_POST['post_comment_token'];
+    $request_token = isset($_POST['post_comment_token']) ? $_POST['post_comment_token'] : "";
     if (isset($request_token) && isset($_SESSION['POST_COMMENT_TOKEN']) && $request_token == $_SESSION['POST_COMMENT_TOKEN']) {
+
         // Getting the POST parameters.
         $new_id = uuid4();
         $user_id = $_POST['user_id'];
@@ -23,9 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $body = $_POST['comment'];
         $today = today();
         $url_back_reference = $_POST['url_back_reference'];
+        $comment_max_chars = 2000;
 
         // Validating body length
-        if (isset($body) && strlen($body) > 0 && strlen($body) <= 2000) {
+        if (validate_field($body, $comment_max_chars)) {
+            
             // Making a prepared statement
             $query = "INSERT INTO comments VALUES(?, ?, ?, ?, ?)";
             $stmt = $connection->prepare($query);
@@ -33,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $was_successful = $stmt->execute();
         } else {
             $connection->close();
-            die("Your comment is invalid or exceeds the maximum amount of characters (2000)");
+            die("Your comment is invalid or exceeds the maximum amount of characters (" . $comment_max_chars . ")");
         }
     } else {
         $connection->close();

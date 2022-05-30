@@ -6,6 +6,7 @@ require_once './config.php';
 require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
 require_once './utils/date_formatting.php';
+require_once './utils/token_generation.php';
 
 // Connecting to the MySQL database.
 $connection = connect_to_db();
@@ -121,12 +122,7 @@ if (isset($post['title'])) {
         <?php if ($loggedIn) {
 
             // We generate a one time action token to prevent CSRF attacks.
-            if (!isset($_SESSION['POST_COMMENT_TOKEN'])) {
-                $post_comment_token = bin2hex(openssl_random_pseudo_bytes(64));
-                $_SESSION['POST_COMMENT_TOKEN'] = $post_comment_token;
-            } else {
-                $post_comment_token = $_SESSION['POST_COMMENT_TOKEN'];
-            }
+            $post_comment_token = generate_token("post_comment_token");
 
         ?>
 

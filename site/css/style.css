@@ -132,9 +132,28 @@ nav ul {
 }
 
 .create-post-form {
-    width: 100%;
-    height: calc(100vh - 200px);
     display: flex;
+    width: 70%;
+    height: calc(100vh - 200px);
+    flex-direction: column;    
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
+    margin: auto;
+}
+.create-post-form * {
+    width: 100%;
+}
+.create-post-form textarea {
+    resize: none;
+    height: 1000px;
+}
+.create-post-form > div {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 0.5rem;
+}
+.create-post-form #draft-input, .create-post-form #draft-label {
+    width: auto;
 }
