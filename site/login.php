@@ -3,6 +3,7 @@
 session_start();
 
 require_once './config.php';
+require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
 require_once './utils/redirection.php';
 
@@ -13,11 +14,7 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
 $loggedIn = false;
 
 // Connecting to the MySQL database.
-$connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
-
-if ($connection->connect_error) {
-    die("Couldn't connect to the database");
-}
+$connection = connect_to_db();
 
 // Processing form data when form is submitted
 $fields_error = null;

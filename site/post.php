@@ -3,14 +3,11 @@
 session_start();
 
 require_once './config.php';
+require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
 
 // Connecting to the MySQL database.
-$connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
-
-if ($connection->connect_error) {
-    die("Couldn't connect to the database");
-}
+$connection = connect_to_db();
 
 // Getting the post by its ID.
 $post = [];
@@ -134,7 +131,7 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
 
                 <!-- In case the user is logged in, show the comment posting form. -->
                 <?php if ($loggedIn) { ?>
-                <form class="user-comment-container">                    
+                <form action="./actions/post_comment.php" method="POST" class="user-comment-container">                    
                     <textarea name="comment" class="comment-input" placeholder="Write a comment as <?php echo $_SESSION['CURRENT_USER_NAME'] ?>"></textarea>
                     <input type="submit" />
                 </form>

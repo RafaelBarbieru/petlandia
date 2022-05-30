@@ -3,14 +3,11 @@
 session_start();
 
 require_once './config.php';
+require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
 
 // Connecting to the MySQL database.
-$connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
-
-if ($connection->connect_error) {
-    die("Couldn't connect to the database");
-}
+$connection = connect_to_db();
 
 // Filling the posts array with data from the database.
 $posts = [];
