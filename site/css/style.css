@@ -15,6 +15,10 @@ nav ul {
     margin-bottom: 0;
 }
 
+.comment {
+    padding: 1rem 0 1rem 0;
+}
+
 .comments-title {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -117,4 +121,12 @@ nav ul {
     width: 100%;
     height: 5rem;
     padding: 0.5rem;
+}
+
+.post-body, .comment-body {
+    margin-top: 1rem;
+}
+
+.post-owner {
+    text-decoration: underline;
 }

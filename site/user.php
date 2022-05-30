@@ -5,6 +5,7 @@ session_start();
 require_once './config.php';
 require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
+require_once './utils/date_formatting.php';
 
 // Connecting to the MySQL database.
 $connection = connect_to_db();
@@ -18,7 +19,8 @@ if ($db_user->num_rows > 0) {
         $user = [
             'name' => $_user['username'],
             'email' => $_user['email'],
-            'picture' => $_user['profile_picture']
+            'picture' => $_user['profile_picture'],
+            'created_at' => $_user['created_at']
         ];
     }
 }
@@ -65,6 +67,7 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                 echo "<span>";
                 echo "<h4>" . $user['name'] . "</h4>";
                 echo "<small>&lt;" . $user['email'] . "&gt;</small>";
+                echo "<p>Member since " . format_date($user['created_at']) . "</p>";
                 echo "</span>";
 
                 // We set the default profile picture if the user doesn't have one assigned

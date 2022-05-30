@@ -5,6 +5,7 @@ session_start();
 require_once './config.php';
 require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
+require_once './utils/date_formatting.php';
 
 // Connecting to the MySQL database.
 $connection = connect_to_db();
@@ -32,9 +33,11 @@ if ($db_posts->num_rows > 0) {
                     'body' => $post['body'],
                     'owner' => [
                         'name' => $post_owner['username'],
-                        'link' => '/user.php?id=' . $post_owner['id']
+                        'link' => '/user.php?id=' . $post_owner['id'],
+                        'created_at' => $post_owner['created_at']
                     ],
-                    'link' => "/post.php?id=" . $post['id']
+                    'link' => "/post.php?id=" . $post['id'],
+                    'created_at' => $post['created_at']
                 ];
             }
         }
@@ -84,23 +87,24 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                     $post_body = $post['body'];
                     $post_owner = $post['owner'];
                     $post_link = $post['link'];
+                    $post_date = $post['created_at'];
 
 
                     // We print the title
-                    echo "<h3><a href='" . $post_link . "'>" . $post_title . "</h3>";
+                    echo "<h3><a href='" . $post_link . "'>" . $post_title . "</a></h3>";
 
                     // We print the owner
                     if (validate_array($post_owner)) {
                         $owner_name = $post_owner['name'];
                         $owner_link = $post_owner['link'];
-                        echo "<b>By: <a href='" . $owner_link . "'>" . $owner_name . "</a></b>";
+                        echo "<b>By: <a class='post-owner' href='" . $owner_link . "'>" . $owner_name . "</a> on " . format_date_with_time($post_date) . "</b>";
                     }
 
                     // If the post's body exceeds 300 characters, we only show the first 297 and an ellipsis at the end.
                     if (strlen($post_body) > 300) {
-                        echo "<p>" . substr($post_body, 0, 297) . "...</p>";
+                        echo "<p class='post-body'>" . substr($post_body, 0, 297) . "...</p>";
                     } else {
-                        echo "<p>" . $post_body . "</p>";
+                        echo "<p class='post-body'>" . $post_body . "</p>";
                     }
 
                     // We print the link

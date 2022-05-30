@@ -5,6 +5,7 @@ session_start();
 require_once './config.php';
 require_once './utils/dbutils.php';
 require_once './utils/array_validation.php';
+require_once './utils/date_formatting.php';
 
 // Connecting to the MySQL database.
 $connection = connect_to_db();
@@ -23,7 +24,7 @@ if ($db_post->num_rows > 0) {
             $owner = $db_owner->fetch_assoc();
 
             // Getting the post's comments
-            $db_comments = $connection->query("SELECT * FROM petlandia.comments comments WHERE comments.post_id = '" . $_GET['id'] . "'");
+            $db_comments = $connection->query("SELECT * FROM petlandia.comments comments WHERE comments.post_id = '" . $_GET['id'] . "' ORDER BY comments.created_at DESC");
             $comments = [];
             if ($db_comments->num_rows > 0) {
                 while ($_comment = $db_comments->fetch_assoc()) {
@@ -36,21 +37,25 @@ if ($db_post->num_rows > 0) {
                             'body' => $_comment['body'],
                             'owner' => [
                                 'name' => $comment_owner['username'],
-                                'link' => '/user.php?id=' . $comment_owner['id']
-                            ]
+                                'link' => '/user.php?id=' . $comment_owner['id']                                
+                            ],
+                            'created_at' => $_comment['created_at']
                         ];
                     }
                 }
             }
             $post = [
+                'id' => $local_post['id'],
                 'title' => $local_post['title'],
                 'body' => $local_post['body'],
                 'owner' => [
                     'name' => $owner['username'],
-                    'link' => '/user.php?id=' . $owner['id']
+                    'link' => '/user.php?id=' . $owner['id'],
+                    'created_at' => $owner['created_at']
                 ],
                 'comments' => $comments,
-                'draft' => $local_post['draft']
+                'draft' => $local_post['draft'],
+                'created_at' => $local_post['created_at']
             ];
         }
     }
@@ -102,6 +107,7 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                 $post_title = $post['title'];
                 $post_body = $post['body'];
                 $post_owner = $post['owner'];
+                $post_date = $post['created_at'];
 
                 echo "<div class='post'>";
 
@@ -112,11 +118,11 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                 if (validate_array($post_owner)) {
                     $owner_name = $post_owner['name'];
                     $owner_link = $post_owner['link'];
-                    echo "<b>By: <a href='" . $owner_link . "'>" . $owner_name . "</a></b>";
+                    echo "<b>By: <a class='post-owner' href='" . $owner_link . "'>" . $owner_name . "</a> on " . format_date_with_time($post_date) . "</b>";
                 }
 
                 // We print the body
-                echo "<p>" . $post_body . "</p>";
+                echo "<p class='post-body'>" . $post_body . "</p>";
 
                 echo "</div>";
             }
@@ -134,6 +140,9 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                 <form action="./actions/post_comment.php" method="POST" class="user-comment-container">                    
                     <textarea name="comment" class="comment-input" placeholder="Write a comment as <?php echo $_SESSION['CURRENT_USER_NAME'] ?>"></textarea>
                     <input type="submit" />
+                    <input hidden name="user_id" value=<?php echo $_SESSION['CURRENT_USER_ID'] ?> />
+                    <input hidden name="post_id" value=<?php echo $post['id'] ?> />
+                    <input hidden name="url_back_reference" value="/post.php?id=<?php echo $post['id'] ?>" />
                 </form>
                 <?php } ?>
 
@@ -144,8 +153,8 @@ if (isset($_SESSION['CURRENT_USER_ID'])) {
                     foreach ($post['comments'] as $comment) {
                         echo "<div class='comment'>";
 
-                        echo "<b><a href='" . $comment['owner']['link'] . "'>" . $comment['owner']['name'] . "</a></b>";
-                        echo "<p>" . $comment['body'] . "</p>";
+                        echo "<b><a href='" . $comment['owner']['link'] . "'>" . $comment['owner']['name'] . "</a></b> (" . format_date_with_time($comment['created_at']) . ")";
+                        echo "<p class='comment-body'>" . $comment['body'] . "</p>";
                         echo "<hr /";
 
                         echo "</div>";
