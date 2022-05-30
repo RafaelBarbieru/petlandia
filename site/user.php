@@ -36,63 +36,39 @@ if ($db_user->num_rows > 0) {
 // We close the connection to the database.
 $connection->close();
 
-if (isset($_SESSION['CURRENT_USER_ID'])) {
-    $loggedIn = true;
-} else {
-    $loggedIn = false;
-}
-
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php require_once './templates/_start_html.php' ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petlandia - <?php echo isset($user['name']) ? $user['name'] : "Anonymous user" ?></title>
+<!-- Link jquery -->
+<script src="./js/jquery.js"></script>
 
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/style.css">
-</head>
+<!-- Body -->
 
-<body>
+<div class="user-container">
+    <?php
 
-    <!-- Link jquery -->
-    <script src="./js/jquery.js"></script>
+    if (isset($user['name']) && isset($user['email'])) {
+        echo "<div class='user'>";
 
-    <!-- Body -->
-    <div class="container">
-        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
-        <div class="user-container">
-            <?php
+        echo "<span>";
+        echo "<h4>" . $user['name'] . "</h4>";
+        echo "<small>&lt;" . $user['email'] . "&gt;</small>";
+        echo "<p>Member since " . format_date($user['created_at']) . "</p>";
+        echo "</span>";
 
-            if (isset($user['name']) && isset($user['email'])) {
-                echo "<div class='user'>";
-
-                echo "<span>";
-                echo "<h4>" . $user['name'] . "</h4>";
-                echo "<small>&lt;" . $user['email'] . "&gt;</small>";
-                echo "<p>Member since " . format_date($user['created_at']) . "</p>";
-                echo "</span>";
-
-                // We set the default profile picture if the user doesn't have one assigned
-                if (isset($user['picture'])) {
-                    echo "<img src='" . $user['picture'] . "' />";
-                } else {
-                    echo "<img src='./images/anonymous_user.png' />";
-                }
+        // We set the default profile picture if the user doesn't have one assigned
+        if (isset($user['picture'])) {
+            echo "<img src='" . $user['picture'] . "' />";
+        } else {
+            echo "<img src='./images/anonymous_user.png' />";
+        }
 
 
-                echo "</div>";
-            }
+        echo "</div>";
+    }
 
-            ?>
-        </div>
-    </div>
+    ?>
+</div>
 
-</body>
-
-</html>
+<?php require_once './templates/_end_html.php' ?>

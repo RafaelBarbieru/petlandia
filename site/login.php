@@ -11,7 +11,6 @@ require_once './utils/redirection.php';
 if (isset($_SESSION['CURRENT_USER_ID'])) {
     redirect('/');
 }
-$loggedIn = false;
 
 // Connecting to the MySQL database.
 $connection = connect_to_db();
@@ -55,45 +54,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petlandia - Login</title>
-
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-
-<body>
-
-    <!-- Link jquery -->
-    <script src="./js/jquery.js"></script>
-
-    <!-- Body -->
-    <div class="container">
-        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
-        <form class="login-container" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-            <div class="login-box">
-                <h3>Log in</h3>
-                <span class="input-group">
-                    <label>Username (or e-mail)</label>
-                    <input name="username" type="text" />
-                </span>
-                <span class="input-group">
-                    <label>Password</label>
-                    <input name="password" type="password" />
-                </span>
-                <input type="submit" />
-                <span class="invalid-fields"><?php echo $fields_error ?></span>
-            </div>
-        </form>
+<?php require_once './templates/_start_html.php' ?>
+<?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
+<form class="login-container" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+    <div class="login-box">
+        <h3>Log in</h3>
+        <span class="input-group">
+            <label>Username (or e-mail)</label>
+            <input name="username" type="text" />
+        </span>
+        <span class="input-group">
+            <label>Password</label>
+            <input name="password" type="password" />
+        </span>
+        <span>
+            <a style="color: blue; float: right;" href="/signup.php">Don't have an account?</a>
+        </span>
+        <input type="submit" />
+        <span class="invalid-fields"><?php echo $fields_error ?></span>
     </div>
-
-</body>
-
-</html>
+</form>
+<?php require_once './templates/_end_html.php' ?>

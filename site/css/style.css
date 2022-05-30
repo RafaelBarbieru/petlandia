@@ -130,3 +130,11 @@ nav ul {
 .post-owner {
     text-decoration: underline;
 }
+
+.create-post-form {
+    width: 100%;
+    height: calc(100vh - 200px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

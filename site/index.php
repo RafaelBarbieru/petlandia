@@ -48,92 +48,64 @@ if ($db_posts->num_rows > 0) {
     }
 }
 
-if (isset($_SESSION['CURRENT_USER_ID'])) {
-    $loggedIn = true;
-} else {
-    $loggedIn = false;
-}
-
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php require_once './templates/_start_html.php' ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petlandia - Home</title>
+<div class="posts">
+    <?php foreach ($posts as $post) {
 
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/style.css">
-</head>
+        // Making sure all the post's fields are set.
+        if (validate_array($post)) {
 
-<body>
+            echo "<div class='list-post'>";
 
-    <!-- Link jquery -->
-    <script src="./js/jquery.js"></script>
-
-    <!-- Body -->
-    <div class="container">
-        <?php $loggedIn ? require_once './templates/_navbar_logged_in.php' : require_once './templates/_navbar_logged_out.php' ?>
-        <div class="posts">
-            <?php foreach ($posts as $post) {
-
-                // Making sure all the post's fields are set.
-                if (validate_array($post)) {
-
-                    echo "<div class='list-post'>";
-
-                    // Saving the post's fields in variables for easier access.
-                    $post_title = $post['title'];
-                    $post_body = $post['body'];
-                    $post_owner = $post['owner'];
-                    $post_link = $post['link'];
-                    $post_date = $post['created_at'];
+            // Saving the post's fields in variables for easier access.
+            $post_title = $post['title'];
+            $post_body = $post['body'];
+            $post_owner = $post['owner'];
+            $post_link = $post['link'];
+            $post_date = $post['created_at'];
 
 
-                    // We print the title
-                    echo "<h3><a href='" . $post_link . "'>" . $post_title . "</a></h3>";
+            // We print the title
+            echo "<h3><a href='" . $post_link . "'>" . $post_title . "</a></h3>";
 
-                    // We print the owner
-                    if (validate_array($post_owner)) {
-                        $owner_name = $post_owner['name'];
-                        $owner_link = $post_owner['link'];
-                        echo "<b>By: <a class='post-owner' href='" . $owner_link . "'>" . $owner_name . "</a> on " . format_date_with_time($post_date) . "</b>";
-                    }
-
-                    // If the post's body exceeds 300 characters, we only show the first 297 and an ellipsis at the end.
-                    if (strlen($post_body) > 300) {
-                        echo "<p class='post-body'>" . substr($post_body, 0, 297) . "...</p>";
-                    } else {
-                        echo "<p class='post-body'>" . $post_body . "</p>";
-                    }
-
-                    // We print the link
-                    echo "<a class='go-to-post' href='" . $post_link . "'>Go to post</a>";
-
-                    // We print the number of comments after getting them from the database using a prepared statement
-                    $query = "SELECT count(*) FROM petlandia.comments WHERE post_id = ?";
-                    $stmt = $connection->prepare($query);
-                    $stmt->bind_param("s", $post['id']);
-                    $stmt->execute();
-                    $number_of_comments = $stmt->get_result();                    
-                    if ($number_of_comments->num_rows > 0) {
-                        echo "<span style='margin-left: 1rem;'>Comments: " . $number_of_comments->fetch_array()[0] . "</span>";
-                    }
-
-                    echo "</div>";
-                }
+            // We print the owner
+            if (validate_array($post_owner)) {
+                $owner_name = $post_owner['name'];
+                $owner_link = $post_owner['link'];
+                echo "<b>By: <a class='post-owner' href='" . $owner_link . "'>" . $owner_name . "</a> on " . format_date_with_time($post_date) . "</b>";
             }
 
-            // We close the database connection because we don't need it anymore.
-            $connection->close();
+            // If the post's body exceeds 300 characters, we only show the first 297 and an ellipsis at the end.
+            if (strlen($post_body) > 300) {
+                echo "<p class='post-body'>" . substr($post_body, 0, 297) . "...</p>";
+            } else {
+                echo "<p class='post-body'>" . $post_body . "</p>";
+            }
 
-            ?>
-        </div>
-    </div>
-</body>
+            // We print the link
+            echo "<a class='go-to-post' href='" . $post_link . "'>Go to post</a>";
 
-</html>
+            // We print the number of comments after getting them from the database using a prepared statement
+            $query = "SELECT count(*) FROM petlandia.comments WHERE post_id = ?";
+            $stmt = $connection->prepare($query);
+            $stmt->bind_param("s", $post['id']);
+            $stmt->execute();
+            $number_of_comments = $stmt->get_result();
+            if ($number_of_comments->num_rows > 0) {
+                echo "<span style='margin-left: 1rem;'>Comments: " . $number_of_comments->fetch_array()[0] . "</span>";
+            }
+
+            echo "</div>";
+        }
+    }
+
+    // We close the database connection because we don't need it anymore.
+    $connection->close();
+
+    ?>
+</div>
+
+<?php require_once './templates/_end_html.php' ?>

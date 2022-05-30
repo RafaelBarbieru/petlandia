@@ -6,7 +6,7 @@
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/user.php?id=<?php echo $_SESSION['CURRENT_USER_ID'] ?>">Profile</a></li>
-        <li><a href="#">Create a post</a></li>
+        <li><a href="/new_post.php?id=<?php echo $_SESSION['CURRENT_USER_ID'] ?>"">Create a post</a></li>
         <li><a href="/logout.php">Log out</a></li>
     </ul>
 </nav>
