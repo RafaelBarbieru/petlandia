@@ -8,6 +8,7 @@ require_once '../utils/uuid.php';
 require_once '../utils/redirection.php';
 require_once '../utils/date_formatting.php';
 require_once '../utils/field_validation.php';
+require_once '../utils/token_generation.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -15,8 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $connection = connect_to_db();
 
     // We validate the anti-CSRF token
-    $request_token = isset($_POST['post_comment_token']) ? $_POST['post_comment_token'] : "";
-    if (isset($request_token) && isset($_SESSION['POST_COMMENT_TOKEN']) && $request_token == $_SESSION['POST_COMMENT_TOKEN']) {
+    $token_name = "post_comment_token";
+    $request_token = isset($_POST[$token_name]) ? $_POST[$token_name] : "";
+    if (validate_token($token_name, $request_token)) {
 
         // Getting the POST parameters.
         $new_id = uuid4();
@@ -50,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($was_successful) {
 
         // We delete the token in the session
-        unset($_SESSION['POST_COMMENT_TOKEN']);
+        unset($_SESSION[strtoupper($token_name)]);
 
         redirect($url_back_reference);
     } else {

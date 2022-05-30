@@ -157,3 +157,26 @@ nav ul {
 .create-post-form #draft-input, .create-post-form #draft-label {
     width: auto;
 }
+
+.create-user-form {
+    width: 60%;
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.create-user-form > div {
+    width: 100%;
+}
+
+.create-user-form label, .create-user-form input {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.create-user-form input[type="submit"] {
+    margin-top: 0.5rem;
+}

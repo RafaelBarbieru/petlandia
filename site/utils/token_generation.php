@@ -9,3 +9,7 @@ function generate_token($name) {
         return $_SESSION[strtoupper($name)];
     }
 }
+
+function validate_token($name, $token) {
+    return isset($token) && isset($_SESSION[strtoupper($name)]) && $token == $_SESSION[strtoupper($name)];
+}
