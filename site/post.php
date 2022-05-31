@@ -59,6 +59,7 @@ if ($db_post->num_rows > 0) {
                 'title' => $local_post['title'],
                 'body' => $local_post['body'],
                 'owner' => [
+                    'id' => $owner['id'],
                     'name' => $owner['username'],
                     'link' => '/user.php?id=' . $owner['id'],
                     'created_at' => $owner['created_at']
@@ -82,8 +83,11 @@ $connection->close();
 // Making sure all the require_onced post's fields are set.
 if (isset($post['title'])) {
 
-    // We check if the post is a draft
-    if ($post['draft']) {
+    // We check if the post is a draft and if the user trying to access it is authorized to see it.
+    if ((isset($post['draft']) && $post['draft'])
+        && $_SESSION['CURRENT_USER_ID'] != $post['owner']['id']
+        && (isset($_SESSION['CURRENT_USER_NAME']) && $_SESSION['CURRENT_USER_NAME'] != 'Administrator')
+    ) {
         echo "This post is a draft and you're not authorized to view it.";
     } else {
         // Saving the post's fields in variables for easier access.
@@ -95,7 +99,11 @@ if (isset($post['title'])) {
         echo "<div class='post'>";
 
         // We print the title
-        echo "<h3>" . $post_title . "</h3>";
+        if ($post['draft']) {
+            echo "<h3>" . $post_title . " <span class='text-danger'>(Draft)</span></h3>";
+        } else {
+            echo "<h3>" . $post_title . "</h3>";
+        }
 
         // We print the owner
         if (validate_array($post_owner)) {

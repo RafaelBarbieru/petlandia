@@ -27,7 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = $_POST['password'];
 
         // We make a prepared statement to query the database since we're dealing with user input.
-        $query = "SELECT id, username, password FROM users WHERE username = ? OR email = ?";
+        // We add the "BINARY" operator in the query because MySQL queries are not case-sensitive by default.
+        $query = "SELECT id, username, password FROM users WHERE BINARY username = ? OR BINARY email = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $username, $username);
         $stmt->execute();
