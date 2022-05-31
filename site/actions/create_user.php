@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($password == $password_again) {
 
                         // Validating the password strength (regex found on https://stackoverflow.com/a/21456918)
-                        $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/";
+                        $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{10,255}$/";
                         if (preg_match($regex, $password) == 1) {
                             // We check if there is already a user with that username or email like this in the database with a prepared statement.
                             $query = "SELECT * FROM users WHERE username = ? OR email = ?";

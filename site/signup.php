@@ -29,12 +29,12 @@ $create_user_token = generate_token("create_user_token");
 
         <div>
             <label for="password">Password</label>
-            <input name="password" type="password" minlength="8" maxlength="255" />
+            <input name="password" type="password" minlength="10" maxlength="255" />
         </div>
 
         <div>
             <label for="repeat_password">Repeat password</label>
-            <input name="password_again" type="password" minlength="8" maxlength="255" />
+            <input name="password_again" type="password" minlength="10" maxlength="255" />
         </div>
 
         <div>
