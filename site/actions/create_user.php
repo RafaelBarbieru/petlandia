@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = null;
         if (validate_field($username, $username_max_chars)) {
             if (validate_field($email, $email_max_chars)) {
-                if (validate_field($password, $password_max_chars) && validate_field($password, $password_max_chars)) {
+                if (validate_field($password, $password_max_chars) && validate_field($password_again, $password_max_chars)) {
 
                     // We check if both password fields have the same value.
                     if ($password == $password_again) {
