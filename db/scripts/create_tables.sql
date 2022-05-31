@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(30) UNIQUE NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    profile_picture BLOB NULL,
+    profile_picture MEDIUMBLOB NULL,
     role BOOLEAN NOT NULL,
     created_at TIMESTAMP NOT NULL,
     PRIMARY KEY(id)

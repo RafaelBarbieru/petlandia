@@ -1,28 +1,28 @@
 /* ===== Users ===== */
 
-/* password: password123 */
+/* password: Rafaelgirafa00 */
 INSERT INTO users VALUES(
     'efc3fb4f-3b25-45b8-8a98-6c0f1db9ef3f', 
     'rafaelgirafa', 
     'baracri00@gmail.com', 
-    '$2y$10$Z7Tmvja.hIJMyQRbdpPCyeclmzO3.gX8TgHGwXv8Cq.1dU7VD4UDq',    
+    '$2a$12$GPKyhT.JYFl/CLRjl05rT.PdWfz4OebXVNXXvprRHMwvS2UuIw7.a',    
     NULL, 
     0,
     CURRENT_TIMESTAMP()
 );
 
-/* password: password123 */
+/* password: FabioVelazquez98 */
 INSERT INTO users VALUES(
     'd862a769-47d7-4c9b-8690-b0e86584314a', 
     'fvelazq98', 
     'redscorpinox@gmail.com', 
-    '$2y$10$Z7Tmvja.hIJMyQRbdpPCyeclmzO3.gX8TgHGwXv8Cq.1dU7VD4UDq', 
+    '$2a$12$GYHTcUizmI5BpWzG9cn98erdhlHIVtiAAsOq0Epd88hIsDaFsqVwS', 
     NULL,
     0,
     CURRENT_TIMESTAMP()
 );
 
-/* password: password123 */
+/* password: Password123 */
 INSERT INTO users VALUES(
     '7c7f0d05-022a-4c72-b728-767db671c329', 
     'crazy4u', 
