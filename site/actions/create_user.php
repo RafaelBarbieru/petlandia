@@ -40,26 +40,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // We check if both password fields have the same value.
                     if ($password == $password_again) {
 
-                        // We check if there is already a user with that username or email like this in the database with a prepared statement.
-                        $query = "SELECT * FROM users WHERE username = ? OR email = ?";
-                        $stmt = $connection->prepare($query);
-                        $stmt->bind_param("ss", $username, $email);
-                        $stmt->execute();
-                        $user = $stmt->get_result();
-                        if ($user->num_rows == 0) {
-
-                            $password_hash = password_hash($password, PASSWORD_BCRYPT);
-                            $is_admin = false;
-                            $picture = isset($_POST['picture']) ? $_POST['picture'] : null;
-
-                            // Inserting the user in the database using a prepared statement
-                            $query = "INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?)";
+                        // Validating the password strength (regex found on https://stackoverflow.com/a/21456918)
+                        $regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/";
+                        if (preg_match($regex, $password) == 1) {
+                            // We check if there is already a user with that username or email like this in the database with a prepared statement.
+                            $query = "SELECT * FROM users WHERE username = ? OR email = ?";
                             $stmt = $connection->prepare($query);
-                            $stmt->bind_param("sssssss", $new_id, $username, $email, $password_hash, $picture, $is_admin, $today);
-                            $was_successful = $stmt->execute();
+                            $stmt->bind_param("ss", $username, $email);
+                            $stmt->execute();
+                            $user = $stmt->get_result();
+                            if ($user->num_rows == 0) {
 
+                                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+                                $is_admin = false;
+                                $picture = isset($_POST['picture']) && $_POST['picture'] != '' ? $_POST['picture'] : null;
+
+                                // Inserting the user in the database using a prepared statement
+                                $query = "INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?)";
+                                $stmt = $connection->prepare($query);
+                                $stmt->bind_param("sssssss", $new_id, $username, $email, $password_hash, $picture, $is_admin, $today);
+                                $was_successful = $stmt->execute();
+                            } else {
+                                $error_message = "There is already a user using that username or email!";
+                            }
                         } else {
-                            $error_message = "There is already a user using that username or email!";
+                            $error_message = "The password must be at least 8 characters long and contain at least one number, one lowercase letter and one uppercase letter.";
                         }
                     } else {
                         $error_message = "The passwords don't match!";
