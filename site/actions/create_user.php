@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             $password_hash = password_hash($password, PASSWORD_BCRYPT);
                             $is_admin = false;
-                            $picture = null;
+                            $picture = isset($_POST['picture']) ? $_POST['picture'] : null;
 
                             // Inserting the user in the database using a prepared statement
                             $query = "INSERT INTO users VALUES(?, ?, ?, ?, ?, ?, ?)";
